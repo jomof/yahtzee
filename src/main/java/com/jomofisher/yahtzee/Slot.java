@@ -2,9 +2,6 @@ package com.jomofisher.yahtzee;
 
 import java.util.Map;
 
-/**
- * Created by jomof on 4/3/2017.
- */
 public enum Slot {
   Ones,
   Twos,
@@ -62,4 +59,82 @@ public enum Slot {
     throw new RuntimeException("Unrecognized");
   }
 
+  public long points(String roll) {
+    switch (this) {
+      case Ones:
+        return Roll.count(roll, 1);
+      case Twos:
+        return Roll.count(roll, 2) * 2;
+      case Threes:
+        return Roll.count(roll, 3) * 3;
+      case Fours:
+        return Roll.count(roll, 4) * 4;
+      case Fives:
+        return Roll.count(roll, 5) * 5;
+      case Sixes:
+        return Roll.count(roll, 6) * 6;
+      case ThreeOfKind: {
+        long result = 0;
+        for (int i = 1; i < 7; ++i) {
+          long count = Roll.count(roll, i);
+          if (count >= 3) {
+            result = Math.max(result, count * i);
+          }
+        }
+        return result;
+      }
+      case FourOfKind: {
+        long result = 0;
+        for (int i = 1; i < 7; ++i) {
+          long count = Roll.count(roll, i);
+          if (count >= 4) {
+            result = Math.max(result, count * i);
+          }
+        }
+        return result;
+      }
+      case FullHouse: {
+        Map<Long, Long> hist = Roll.histogram(roll);
+        if (hist.size() == 1) {
+          return 25;
+        }
+        if (hist.size() != 2) {
+          return 0;
+        }
+        long count = hist.values().iterator().next();
+        if (count == 2 || count == 3) {
+          return 25;
+        }
+        return 0;
+      }
+      case Yahtzee: {
+        long result = 0;
+        for (int i = 1; i < 7; ++i) {
+          long count = Roll.count(roll, i);
+          if (count == 6) {
+            result = Math.max(result, count * i);
+          }
+        }
+        return result != 0 ? 50 : 0;
+      }
+      case SmallStraight: {
+        Map<Long, Long> hist = Roll.histogram(roll);
+        if (hist.size() == 4 || hist.size() == 5) {
+          return 30;
+        }
+        return 0;
+      }
+      case LargeStraight: {
+        Map<Long, Long> hist = Roll.histogram(roll);
+        if (hist.size() == 5) {
+          return 40;
+        }
+        return 0;
+      }
+      case Chance: {
+        return Roll.sum(roll);
+      }
+    }
+    throw new RuntimeException(this.toString());
+  }
 }
