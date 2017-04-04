@@ -42,9 +42,10 @@ public class SlotsTest {
 
   private void assignGreedy(Score score, String roll, Slot expected, long scoreExpected) {
     int roll1 = Roll.fromString(roll);
-    Slot greediest = Slots.greediest(score, roll1);
+    int hist = Roll.histogram(roll1);
+    Slot greediest = Slots.greediest(score, hist);
     assertThat(greediest).isEqualTo(expected);
-    long points = greediest.points(Roll.histogram(roll1));
+    long points = greediest.points(hist);
     score.put(greediest, points);
     assertThat(score.score()).isEqualTo(scoreExpected);
   }

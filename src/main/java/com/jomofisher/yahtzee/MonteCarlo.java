@@ -6,7 +6,6 @@ class MonteCarlo {
   public static double finishGreedy(Score score, int n) {
     double sum = 0;
     for (int i = 0; i < n; ++i) {
-      //Score copy = score.copy();
       sum += finishGreedyInPlace(score);
     }
     return (sum / n);
@@ -18,10 +17,10 @@ class MonteCarlo {
     }
     long best = -1;
     Slot bestSlot = null;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 2; ++i) {
       int roll = Roll.randomInt();
       int hist = Roll.histogram(roll);
-      Slot slot = Slots.greediest(score, roll);
+      Slot slot = Slots.greediest(score, hist);
       long points = slot.points(hist);
       if (points > best) {
         best = points;
@@ -56,7 +55,7 @@ class MonteCarlo {
 
   public static Move findBest(Score score, int roll, boolean allowReroll) {
     // Loop over all possible placements
-    Pair<Slot, Double> result = findBestPlaceForRoll(score, roll, 200);
+    Pair<Slot, Double> result = findBestPlaceForRoll(score, roll, 150);
     Move bestMove = new Move(result.getKey());
     double bestScore = result.getValue();
 

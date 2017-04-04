@@ -3,11 +3,6 @@ package com.jomofisher.yahtzee;
 import java.util.Map;
 
 class Slots {
-
-  static long remaining(Map<Slot, Long> slots) {
-    return Slot.values().length - slots.values().size();
-  }
-
   static long score(Map<Slot, Long> slots) {
     long top = 0;
     long bottom = 0;
@@ -27,21 +22,22 @@ class Slots {
     return top + bottom;
   }
 
-  static Slot greediest(Score score, int roll) {
+  static Slot greediest(Score score, int hist) {
     long bestScore = -1;
     Slot bestMove = null;
-    int hist = Roll.histogram(roll);
-    for (Slot slot : Slot.values()) {
-      if (!score.contains(slot)) {
-        long points = slot.points(hist);
-        score.put(slot, points);
-        long value = score.score();
-        if (value > bestScore) {
-          bestScore = value;
-          bestMove = slot;
-        }
-        score.remove(slot);
+    for (int i = 0; i < Slot.slotCount; ++i) {
+      if (score.contains(i)) {
+        continue;
       }
+      Slot slot = Slot.values[i];
+      long points = slot.points(hist);
+      score.put(slot, points);
+      long value = score.score();
+      if (value > bestScore) {
+        bestScore = value;
+        bestMove = slot;
+      }
+      score.remove(slot);
     }
     return bestMove;
   }

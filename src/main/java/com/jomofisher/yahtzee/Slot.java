@@ -1,7 +1,5 @@
 package com.jomofisher.yahtzee;
 
-import java.util.Map;
-
 public enum Slot {
   Ones,
   Twos,
@@ -16,42 +14,8 @@ public enum Slot {
   LargeStraight,
   Chance,
   Yahtzee;
-
-  private static boolean isMultiple(long value, long of) {
-    return ((value / of) * of) == value;
-  }
-
-//  private boolean isValidValue(Long value) {
-//    switch (this) {
-//      case Ones:
-//        return isMultiple(value, 1);
-//      case Twos:
-//        return isMultiple(value, 2);
-//      case Threes:
-//        return isMultiple(value, 3);
-//      case Fours:
-//        return isMultiple(value, 4);
-//      case Fives:
-//        return isMultiple(value, 5);
-//      case Sixes:
-//        return isMultiple(value, 6);
-//      case ThreeOfKind:
-//        return value >= 5; // Five ones is lowest 3-of-kind
-//      case FourOfKind:
-//        return value >= 5; // Five ones is lowest 4-of-kind
-//      case FullHouse:
-//        return value >= 5; // Five ones is lowest full house
-//      case SmallStraight:
-//        return value == 30;
-//      case LargeStraight:
-//        return value == 40;
-//      case Chance:
-//        return value >= 5; // Five ones is lowest chance
-//      case Yahtzee:
-//        return value >= 5; // Five ones is lowest yahtzee
-//    }
-//    throw new RuntimeException("Unrecognized");
-//  }
+  final static Slot[] values = Slot.values();
+  static final int slotCount = Slot.values().length;
 
   public long points(int hist) {
     switch (this) {
