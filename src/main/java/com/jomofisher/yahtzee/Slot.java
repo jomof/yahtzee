@@ -21,43 +21,37 @@ public enum Slot {
     return ((value / of) * of) == value;
   }
 
-  public void record(Map<Slot, Long> slots, Long value) {
-    assert (slots.get(this) == null);
-    assert (isValidValue(value));
-    slots.put(this, value);
-  }
-
-  private boolean isValidValue(Long value) {
-    switch (this) {
-      case Ones:
-        return isMultiple(value, 1);
-      case Twos:
-        return isMultiple(value, 2);
-      case Threes:
-        return isMultiple(value, 3);
-      case Fours:
-        return isMultiple(value, 4);
-      case Fives:
-        return isMultiple(value, 5);
-      case Sixes:
-        return isMultiple(value, 6);
-      case ThreeOfKind:
-        return value >= 5; // Five ones is lowest 3-of-kind
-      case FourOfKind:
-        return value >= 5; // Five ones is lowest 4-of-kind
-      case FullHouse:
-        return value >= 5; // Five ones is lowest full house
-      case SmallStraight:
-        return value == 30;
-      case LargeStraight:
-        return value == 40;
-      case Chance:
-        return value >= 5; // Five ones is lowest chance
-      case Yahtzee:
-        return value >= 5; // Five ones is lowest yahtzee
-    }
-    throw new RuntimeException("Unrecognized");
-  }
+//  private boolean isValidValue(Long value) {
+//    switch (this) {
+//      case Ones:
+//        return isMultiple(value, 1);
+//      case Twos:
+//        return isMultiple(value, 2);
+//      case Threes:
+//        return isMultiple(value, 3);
+//      case Fours:
+//        return isMultiple(value, 4);
+//      case Fives:
+//        return isMultiple(value, 5);
+//      case Sixes:
+//        return isMultiple(value, 6);
+//      case ThreeOfKind:
+//        return value >= 5; // Five ones is lowest 3-of-kind
+//      case FourOfKind:
+//        return value >= 5; // Five ones is lowest 4-of-kind
+//      case FullHouse:
+//        return value >= 5; // Five ones is lowest full house
+//      case SmallStraight:
+//        return value == 30;
+//      case LargeStraight:
+//        return value == 40;
+//      case Chance:
+//        return value >= 5; // Five ones is lowest chance
+//      case Yahtzee:
+//        return value >= 5; // Five ones is lowest yahtzee
+//    }
+//    throw new RuntimeException("Unrecognized");
+//  }
 
   public long points(int hist) {
     switch (this) {

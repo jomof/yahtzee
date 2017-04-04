@@ -27,20 +27,20 @@ class Slots {
     return top + bottom;
   }
 
-  static Slot greediest(Map<Slot, Long> slots, int roll) {
+  static Slot greediest(Score score, int roll) {
     long bestScore = -1;
     Slot bestMove = null;
     int hist = Roll.histogram(roll);
     for (Slot slot : Slot.values()) {
-      if (!slots.containsKey(slot)) {
+      if (!score.contains(slot)) {
         long points = slot.points(hist);
-        slots.put(slot, points);
-        long score = score(slots);
-        if (score > bestScore) {
-          bestScore = score;
+        score.put(slot, points);
+        long value = score.score();
+        if (value > bestScore) {
+          bestScore = value;
           bestMove = slot;
         }
-        slots.remove(slot);
+        score.remove(slot);
       }
     }
     return bestMove;

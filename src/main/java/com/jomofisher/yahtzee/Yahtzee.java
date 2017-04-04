@@ -1,13 +1,10 @@
 package com.jomofisher.yahtzee;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Yahtzee {
-  final private Map<Slot, Long> slots = new HashMap<>();
+  final private Score score = new Score();
 
   Yahtzee with(Slot slot, long value) {
-    slot.record(slots, value);
+    score.put(slot, value);
     return this;
   }
 

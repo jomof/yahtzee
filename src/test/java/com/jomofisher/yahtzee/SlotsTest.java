@@ -28,71 +28,24 @@ public class SlotsTest {
   }
 
   @Test
-  public void assignBest2() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assertThat(Slots.score(slots)).isEqualTo(80);
-  }
-
-  @Test
-  public void assignBest3() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assertThat(Slots.score(slots)).isEqualTo(110);
-  }
-
-  @Test
-  public void assignBest4() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assertThat(Slots.score(slots)).isEqualTo(140);
-  }
-
-  @Test
-  public void assignBest5() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assertThat(Slots.score(slots)).isEqualTo(170);
-  }
-
-  @Test
-  public void assignBest6() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assertThat(Slots.score(slots)).isEqualTo(195);
-  }
-
-  @Test
   public void assignBest7() {
-    Map<Slot, Long> slots = new HashMap<>();
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66666");
-    assignGreedy(slots, "66665"); // Fives
-    assertThat(Slots.score(slots)).isEqualTo(200);
+    Score score = new Score();
+    assignGreedy(score, "66666", Slot.Yahtzee, 50);
+    assignGreedy(score, "66666", Slot.Sixes, 80);
+    assignGreedy(score, "66666", Slot.ThreeOfKind, 110);
+    assignGreedy(score, "66666", Slot.FourOfKind, 140);
+    assignGreedy(score, "66666", Slot.Chance, 170);
+    assignGreedy(score, "66666", Slot.FullHouse, 195);
+    assignGreedy(score, "66665", Slot.Fives, 200); // Fives
+    assertThat(score.score()).isEqualTo(200);
   }
 
-  private void assignGreedy(Map<Slot, Long> slots, String roll) {
-    Slot greediest = Slots.greediest(slots, Roll.fromString(roll));
-    long points = greediest.points(Roll.histogram(Roll.fromString(roll)));
-    slots.put(greediest, points);
+  private void assignGreedy(Score score, String roll, Slot expected, long scoreExpected) {
+    int roll1 = Roll.fromString(roll);
+    Slot greediest = Slots.greediest(score, roll1);
+    assertThat(greediest).isEqualTo(expected);
+    long points = greediest.points(Roll.histogram(roll1));
+    score.put(greediest, points);
+    assertThat(score.score()).isEqualTo(scoreExpected);
   }
 }
