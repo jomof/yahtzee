@@ -22,7 +22,7 @@ public enum Slot {
   }
 
   public void record(Map<Slot, Long> slots, Long value) {
-    assert (slots.get(value) == null);
+    assert (slots.get(this) == null);
     assert (isValidValue(value));
     slots.put(this, value);
   }
@@ -59,82 +59,106 @@ public enum Slot {
     throw new RuntimeException("Unrecognized");
   }
 
-  public long points(String roll) {
+  public long points(int hist) {
     switch (this) {
       case Ones:
-        return Roll.count(roll, 1);
+        return Histogram.countAt(hist, 1);
       case Twos:
-        return Roll.count(roll, 2) * 2;
+        return Histogram.countAt(hist, 2) * 2;
       case Threes:
-        return Roll.count(roll, 3) * 3;
+        return Histogram.countAt(hist, 3) * 3;
       case Fours:
-        return Roll.count(roll, 4) * 4;
+        return Histogram.countAt(hist, 4) * 4;
       case Fives:
-        return Roll.count(roll, 5) * 5;
+        return Histogram.countAt(hist, 5) * 5;
       case Sixes:
-        return Roll.count(roll, 6) * 6;
+        return Histogram.countAt(hist, 6) * 6;
       case ThreeOfKind: {
-        long result = 0;
         for (int i = 1; i < 7; ++i) {
-          long count = Roll.count(roll, i);
+          long count = Histogram.countAt(hist, i);
           if (count >= 3) {
-            result = Math.max(result, count * i);
+            return Histogram.sum(hist);
           }
         }
-        return result;
+        return 0;
       }
       case FourOfKind: {
-        long result = 0;
         for (int i = 1; i < 7; ++i) {
-          long count = Roll.count(roll, i);
+          long count = Histogram.countAt(hist, i);
           if (count >= 4) {
-            result = Math.max(result, count * i);
+            return Histogram.sum(hist);
           }
         }
-        return result;
+        return 0;
       }
       case FullHouse: {
-        Map<Long, Long> hist = Roll.histogram(roll);
-        if (hist.size() == 1) {
+        int buckets = Histogram.buckets(hist);
+        if (buckets == 1) {
           return 25;
         }
-        if (hist.size() != 2) {
+        if (buckets != 2) {
           return 0;
         }
-        long count = hist.values().iterator().next();
+        long count = Histogram.firstBucketCount(hist);
         if (count == 2 || count == 3) {
           return 25;
         }
         return 0;
       }
       case Yahtzee: {
-        long result = 0;
-        for (int i = 1; i < 7; ++i) {
-          long count = Roll.count(roll, i);
-          if (count == 6) {
-            result = Math.max(result, count * i);
-          }
-        }
-        return result != 0 ? 50 : 0;
+        return Histogram.buckets(hist) == 1 ? 50 : 0;
       }
       case SmallStraight: {
-        Map<Long, Long> hist = Roll.histogram(roll);
-        if (hist.size() == 4 || hist.size() == 5) {
+        int buckets = Histogram.buckets(hist);
+        if (buckets == 5) {
           return 30;
+        }
+
+        if (buckets == 4) {
+          // Well isn't this something?
+          boolean three = Histogram.countAt(hist, 3) != 0;
+          boolean four = Histogram.countAt(hist, 4) != 0;
+          if (three && four) {
+            boolean one = Histogram.countAt(hist, 1) != 0;
+            boolean two = Histogram.countAt(hist, 2) != 0;
+            if (one && two) {
+              return 30;
+            }
+            boolean five = Histogram.countAt(hist, 5) != 0;
+            if (two && five) {
+              return 30;
+            }
+            boolean six = Histogram.countAt(hist, 6) != 0;
+            if (five && six)
+              return 30;
+          }
         }
         return 0;
       }
       case LargeStraight: {
-        Map<Long, Long> hist = Roll.histogram(roll);
-        if (hist.size() == 5) {
+        int buckets = Histogram.buckets(hist);
+        if (buckets == 5) {
           return 40;
         }
         return 0;
       }
       case Chance: {
-        return Roll.sum(roll);
+        return Histogram.sum(hist);
       }
     }
     throw new RuntimeException(this.toString());
+  }
+
+  public boolean isTop() {
+    switch (this) {
+      case Ones:
+      case Twos:
+      case Threes:
+      case Fours:
+      case Fives:
+      case Sixes:
+        return true;
+    }
+    return false;
   }
 }
