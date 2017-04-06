@@ -28,7 +28,6 @@ public class YahtzeeTest {
         .with(Slot.Yahtzee, 0)
         .with(Slot.Chance, 22)
         .with(Slot.Fives, 15)
-        .with(Slot.Sixes, 18)
         .score();
 
     Move next = null;
