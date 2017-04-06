@@ -2,7 +2,7 @@ package com.jomofisher.yahtzee;
 
 public class Split {
   final public int keep;
-  final public int reroll;
+  private final int reroll;
 
   Split(int keep, int reroll) {
     this.keep = keep;

@@ -17,7 +17,7 @@ class MonteCarlo {
     }
     long best = -1;
     Slot bestSlot = null;
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 6; ++i) {
       int roll = Roll.randomInt();
       int hist = Roll.histogram(roll);
       Slot slot = Slots.greediest(score, hist);
@@ -55,7 +55,7 @@ class MonteCarlo {
 
   public static Move findBest(Score score, int roll, boolean allowReroll) {
     // Loop over all possible placements
-    Pair<Slot, Double> result = findBestPlaceForRoll(score, roll, 150);
+    Pair<Slot, Double> result = findBestPlaceForRoll(score, roll, 2000);
     Move bestMove = new Move(result.getKey());
     double bestScore = result.getValue();
 
@@ -64,10 +64,10 @@ class MonteCarlo {
       for (Split split : Roll.splits(roll)) {
         // Reroll that split many times
         double sum = 0;
-        long count = 25;
+        long count = 30;
         for (int i = 0; i < count; ++i) {
           int reroll = Roll.reroll(split.keep);
-          sum += findBestPlaceForRoll(score, reroll, 200).getValue();
+          sum += findBestPlaceForRoll(score, reroll, 100).getValue();
         }
         double mean = sum / count;
         if (mean > bestScore) {

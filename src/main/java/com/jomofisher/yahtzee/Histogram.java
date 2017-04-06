@@ -1,13 +1,19 @@
 package com.jomofisher.yahtzee;
 
 class Histogram {
-  static int lastHistogramForSum = 0;
-  static long lastSum = 0;
+  private static int lastHistogramForSum = 0;
+  private static long lastSum = 0;
+  private static int lastHistogramForBuckets = 0;
+  private static int lastBuckets= 0;
 
   /**
-   * Noumber of non-zero buckets in the histogram.
+   * Number of non-zero buckets in the histogram.
    */
   public static int buckets(int histogram) {
+    if (histogram == lastHistogramForBuckets) {
+      return lastBuckets;
+    }
+    lastHistogramForBuckets = histogram;
     int result = 0;
     while (histogram > 0) {
       if (histogram % 8 > 0) {
@@ -15,11 +21,12 @@ class Histogram {
       }
       histogram >>= 3;
     }
+    lastBuckets = result;
     return result;
   }
 
   /**
-   * Return the number of items in th first non-zero bucket.
+   * Return the number of items in the first non-zero bucket.
    */
   public static long firstBucketCount(int histogram) {
     while (histogram > 0) {
@@ -46,6 +53,7 @@ class Histogram {
     if (histogram == lastHistogramForSum) {
       return lastSum;
     }
+    lastHistogramForSum = histogram;
 
     int i = 0;
     long sum = 0;
@@ -54,7 +62,6 @@ class Histogram {
       histogram >>= 3;
       ++i;
     }
-    lastHistogramForSum = histogram;
     lastSum = sum;
     return sum;
   }

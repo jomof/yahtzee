@@ -7,8 +7,12 @@ import static com.google.common.truth.Truth.assertThat;
 public class SlotTest {
   @Test
   public void points() {
+    System.out.printf(Roll.asString(11357));
+    assertThat(Slot.LargeStraight.points(Roll.histogram(11357))).isEqualTo(0);
+
     assertThat(Slot.Ones.points(hist("12134"))).isEqualTo(2);
     assertThat(Slot.Twos.points(hist("12224"))).isEqualTo(6);
+
   }
 
   @Test
@@ -44,6 +48,7 @@ public class SlotTest {
 
   @Test
   public void smallStraight() {
+    assertThat(Slot.SmallStraight.points(hist("56124"))).isEqualTo(0);
     assertThat(Slot.SmallStraight.points(hist("66245"))).isEqualTo(0);
     assertThat(Slot.SmallStraight.points(hist("66312"))).isEqualTo(0);
     assertThat(Slot.SmallStraight.points(hist("12134"))).isEqualTo(30);
@@ -57,6 +62,7 @@ public class SlotTest {
 
   @Test
   public void largeStraight() {
+    assertThat(Slot.LargeStraight.points(hist("32546"))).isEqualTo(40);
     assertThat(Slot.LargeStraight.points(hist("12134"))).isEqualTo(0);
     assertThat(Slot.LargeStraight.points(hist("54312"))).isEqualTo(40);
     assertThat(Slot.LargeStraight.points(hist("12345"))).isEqualTo(40);
@@ -85,7 +91,7 @@ public class SlotTest {
     }
   }
 
-  int hist(String s) {
+  private int hist(String s) {
     return Roll.histogram(Roll.fromString(s));
   }
 }

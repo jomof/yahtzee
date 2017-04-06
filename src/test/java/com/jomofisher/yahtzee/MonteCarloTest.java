@@ -31,5 +31,4 @@ public class MonteCarloTest {
     Move result = MonteCarlo.findBest(new Score(), Roll.fromString("66245"), true);
     System.out.printf("%s\n", result);
   }
-
 }

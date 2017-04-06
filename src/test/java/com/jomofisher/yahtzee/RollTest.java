@@ -31,10 +31,6 @@ public class RollTest {
     Split[] splits = Roll.splits(Roll.fromString("62346"));
   }
 
-  @Test
-  public void potpourri() {
-
-  }
 
   @Test
   public void asString() {

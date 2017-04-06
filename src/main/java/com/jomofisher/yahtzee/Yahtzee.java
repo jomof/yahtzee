@@ -1,9 +1,9 @@
 package com.jomofisher.yahtzee;
 
-public class Yahtzee {
+class Yahtzee {
   final private Score score = new Score();
 
-  Yahtzee with(Slot slot, long value) {
+  public Yahtzee with(Slot slot, long value) {
     score.put(slot, value);
     return this;
   }
@@ -30,5 +30,9 @@ public class Yahtzee {
 
   Yahtzee withSixes(long value) {
     return with(Slot.Sixes, value);
+  }
+
+  public Score score() {
+    return score;
   }
 }

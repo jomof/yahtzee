@@ -69,7 +69,18 @@ public enum Slot {
       case SmallStraight: {
         int buckets = Histogram.buckets(hist);
         if (buckets == 5) {
-          return 30;
+          boolean one = Histogram.countAt(hist, 1) != 0;
+          boolean two = Histogram.countAt(hist, 2) != 0;
+          boolean three = Histogram.countAt(hist, 3) != 0;
+          boolean four = Histogram.countAt(hist, 4) != 0;
+          boolean five = Histogram.countAt(hist, 5) != 0;
+          boolean six = Histogram.countAt(hist, 6) != 0;
+          if (one && two && three && four && five) {
+            return 30;
+          }
+          if (two && three && four && five && six) {
+            return 30;
+          }
         }
 
         if (buckets == 4) {
@@ -96,7 +107,19 @@ public enum Slot {
       case LargeStraight: {
         int buckets = Histogram.buckets(hist);
         if (buckets == 5) {
-          return 40;
+          // Well isn't this something?
+          boolean one = Histogram.countAt(hist, 1) != 0;
+          boolean two = Histogram.countAt(hist, 2) != 0;
+          boolean three = Histogram.countAt(hist, 3) != 0;
+          boolean four = Histogram.countAt(hist, 4) != 0;
+          boolean five = Histogram.countAt(hist, 5) != 0;
+          boolean six = Histogram.countAt(hist, 6) != 0;
+          if (one && two && three && four && five) {
+            return 40;
+          }
+          if (two && three && four && five && six) {
+            return 40;
+          }
         }
         return 0;
       }

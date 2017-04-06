@@ -1,11 +1,8 @@
 package com.jomofisher.yahtzee;
 
-/**
- * Created by jomof on 4/3/2017.
- */
 class Move {
-  private final Split split;
-  private final Slot slot;
+  public final Split split;
+  public final Slot slot;
 
   Move(Split split) {
     this.split = split;

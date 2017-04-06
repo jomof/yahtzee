@@ -1,6 +1,6 @@
 package com.jomofisher.yahtzee;
 
-public class Score {
+class Score {
   private int count = 0;
   private long score = -1;
   final private boolean has [] = new boolean[13]; 
@@ -8,7 +8,9 @@ public class Score {
 
   void put(Slot slot, long value) {
     int ordinal = slot.ordinal();
-    assert(!has[ordinal]);
+    if(has[ordinal]) {
+      throw new RuntimeException(String.format("Already had %s for %s points", slot, slots[ordinal]));
+    }
     slots[ordinal] = value;
     has[ordinal] = true;
     ++count;

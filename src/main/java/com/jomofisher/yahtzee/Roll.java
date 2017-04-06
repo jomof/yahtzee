@@ -3,7 +3,7 @@ package com.jomofisher.yahtzee;
 import java.util.Random;
 
 class Roll {
-  private static Random rand = new Random();
+  private static final Random rand = new Random();
 
   static void check(String roll) {
     assert (roll != null);
@@ -67,16 +67,6 @@ class Roll {
     return result;
   }
 
-  public static long sum(int roll) {
-    int result = 0;
-    while (roll > 0) {
-      int valueAt = roll % 8;
-      result += valueAt;
-      roll >>= 3;
-    }
-    return result;
-  }
-
   public static int histogram(int roll) {
     // Format of result is 3 bits per slot
     int result = 0;
@@ -103,7 +93,6 @@ class Roll {
   }
 
   public static Split[] splits(int roll) {
-    String t = Roll.asString(roll);
     Split result[] = new Split[32];
     for (int i = 0; i < 32; ++i) {
       int keep = 0;
@@ -111,10 +100,6 @@ class Roll {
       int mod = i;
       for (int j = 0; j < 5; ++j) {
         int digit = Roll.getDigitAt(roll, j);
-        if (digit == 0) {
-          throw new RuntimeException(String.format("assertThat(Roll.getDigitAt(%s, %s)).isNotEqualTo(0);", roll, j));
-        }
-        assert(digit != 0);
         if (mod % 2 == 0) {
           reroll = Roll.putDigitAt(reroll, j, digit);
         } else {
@@ -135,7 +120,7 @@ class Roll {
     return die;
   }
 
-  public static int putDigitAt(int roll, int n, int die) {
+  private static int putDigitAt(int roll, int n, int die) {
     assert(die > 0 && die <= 6);
     assert (getDigitAt(roll, n) == 0);
     die <<= (n * 3);
